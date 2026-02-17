@@ -1,207 +1,132 @@
 class QuestionarioService {
     constructor() {
         this.menuPrincipal = {
-            id: 0,
+            id: 'menu',
             pergunta: "Olá! 👋 Sou o assistente virtual. Para melhor atendê-lo, escolha uma opção:\n\n" +
                      "1️⃣ 📋 Módulo Fiscal\n" +
                      "2️⃣ 💻 Módulo PDV\n" +
                      "3️⃣ 📦 Módulo Administrativo/Estoque\n" +
                      "4️⃣ 📝 Outros assuntos\n\n" +
                      "*Digite o número da opção desejada:*",
-            opcoes: [
-                { id: '1', texto: '1️⃣ Módulo Fiscal', fluxo: 'fiscal' },
-                { id: '2', texto: '2️⃣ Módulo PDV', fluxo: 'pdv' },
-                { id: '3', texto: '3️⃣ Módulo Administrativo/Estoque', fluxo: 'administrativo' },
-                { id: '4', texto: '4️⃣ Outros', fluxo: 'outros' }
-            ]
+            opcoes: {
+                '1': { texto: 'Módulo Fiscal', fluxo: 'fiscal' },
+                '2': { texto: 'Módulo PDV', fluxo: 'pdv' },
+                '3': { texto: 'Módulo Administrativo/Estoque', fluxo: 'administrativo' },
+                '4': { texto: 'Outros', fluxo: 'outros' }
+            }
         };
 
         this.fluxos = {
             fiscal: {
                 titulo: "📋 Módulo Fiscal",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Você selecionou *Módulo Fiscal*.\n\n" +
-                                 "Escolha uma opção:\n\n" +
-                                 "1️⃣ Nota Fiscal Entrada\n" +
-                                 "2️⃣ Emissão de NF\n" +
-                                 "3️⃣ Certificado Digital\n" +
-                                 "4️⃣ Voltar ao menu principal\n\n" +
-                                 "*Digite o número da opção desejada:*",
-                        opcoes: [
-                            { id: '1', texto: '1️⃣ Nota Fiscal Entrada', fluxo: 'fiscal_nota_entrada' },
-                            { id: '2', texto: '2️⃣ Emissão de NF', fluxo: 'fiscal_emissao' },
-                            { id: '3', texto: '3️⃣ Certificado Digital', fluxo: 'fiscal_certificado' },
-                            { id: '4', texto: '4️⃣ Voltar', fluxo: 'voltar' }
-                        ]
+                menu: {
+                    pergunta: "Você selecionou *Módulo Fiscal*.\n\n" +
+                             "Escolha uma opção:\n\n" +
+                             "1️⃣ Nota Fiscal Entrada\n" +
+                             "2️⃣ Emissão de NF\n" +
+                             "3️⃣ Certificado Digital\n" +
+                             "4️⃣ Voltar ao menu principal\n\n" +
+                             "*Digite o número da opção desejada:*",
+                    opcoes: {
+                        '1': { texto: 'Nota Fiscal Entrada', fluxo: 'fiscal_nota_entrada' },
+                        '2': { texto: 'Emissão de NF', fluxo: 'fiscal_emissao' },
+                        '3': { texto: 'Certificado Digital', fluxo: 'fiscal_certificado' },
+                        '4': { texto: 'Voltar', fluxo: 'menu' }
                     }
-                ]
+                }
             },
             fiscal_nota_entrada: {
                 titulo: "📋 Fiscal > Nota Fiscal Entrada",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Nota Fiscal Entrada*:\n\n" +
-                                 "(Ex: Erro ao lançar, nota não entra, duplicidade, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Nota Fiscal Entrada*:\n\n" +
+                         "(Ex: Erro ao lançar, nota não entra, duplicidade, etc)"
             },
             fiscal_emissao: {
                 titulo: "📋 Fiscal > Emissão de NF",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Emissão de NF*:\n\n" +
-                                 "(Ex: Erro ao emitir, cálculo de impostos, cancelamento, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Emissão de NF*:\n\n" +
+                         "(Ex: Erro ao emitir, cálculo de impostos, cancelamento, etc)"
             },
             fiscal_certificado: {
                 titulo: "📋 Fiscal > Certificado Digital",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Certificado Digital*:\n\n" +
-                                 "(Ex: Certificado vencido, erro de instalação, validação, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Certificado Digital*:\n\n" +
+                         "(Ex: Certificado vencido, erro de instalação, validação, etc)"
             },
             pdv: {
                 titulo: "💻 Módulo PDV",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Você selecionou *Módulo PDV*.\n\n" +
-                                 "Escolha uma opção:\n\n" +
-                                 "1️⃣ Periféricos (teclado, pinpad, leitor)\n" +
-                                 "2️⃣ Promoções\n" +
-                                 "3️⃣ Preços\n" +
-                                 "4️⃣ Consistência\n" +
-                                 "5️⃣ Voltar ao menu principal\n\n" +
-                                 "*Digite o número da opção desejada:*",
-                        opcoes: [
-                            { id: '1', texto: '1️⃣ Periféricos', fluxo: 'pdv_perifericos' },
-                            { id: '2', texto: '2️⃣ Promoções', fluxo: 'pdv_promocoes' },
-                            { id: '3', texto: '3️⃣ Preços', fluxo: 'pdv_precos' },
-                            { id: '4', texto: '4️⃣ Consistência', fluxo: 'pdv_consistencia' },
-                            { id: '5', texto: '5️⃣ Voltar', fluxo: 'voltar' }
-                        ]
+                menu: {
+                    pergunta: "Você selecionou *Módulo PDV*.\n\n" +
+                             "Escolha uma opção:\n\n" +
+                             "1️⃣ Periféricos (teclado, pinpad, leitor)\n" +
+                             "2️⃣ Promoções\n" +
+                             "3️⃣ Preços\n" +
+                             "4️⃣ Consistência\n" +
+                             "5️⃣ Voltar ao menu principal\n\n" +
+                             "*Digite o número da opção desejada:*",
+                    opcoes: {
+                        '1': { texto: 'Periféricos', fluxo: 'pdv_perifericos' },
+                        '2': { texto: 'Promoções', fluxo: 'pdv_promocoes' },
+                        '3': { texto: 'Preços', fluxo: 'pdv_precos' },
+                        '4': { texto: 'Consistência', fluxo: 'pdv_consistencia' },
+                        '5': { texto: 'Voltar', fluxo: 'menu' }
                     }
-                ]
+                }
             },
             pdv_perifericos: {
                 titulo: "💻 PDV > Periféricos",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Periféricos*:\n\n" +
-                                 "(Ex: Pinpad não conecta, leitor não lê, teclado sem função, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Periféricos*:\n\n" +
+                         "(Ex: Pinpad não conecta, leitor não lê, teclado sem função, etc)"
             },
             pdv_promocoes: {
                 titulo: "💻 PDV > Promoções",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Promoções*:\n\n" +
-                                 "(Ex: Promoção não aplica, configuração errada, acumula com outras, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Promoções*:\n\n" +
+                         "(Ex: Promoção não aplica, configuração errada, acumula com outras, etc)"
             },
             pdv_precos: {
                 titulo: "💻 PDV > Preços",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Preços*:\n\n" +
-                                 "(Ex: Preço errado, não atualiza, diferença de valor, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Preços*:\n\n" +
+                         "(Ex: Preço errado, não atualiza, diferença de valor, etc)"
             },
             pdv_consistencia: {
                 titulo: "💻 PDV > Consistência",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Consistência*:\n\n" +
-                                 "(Ex: Estoque inconsistente, diferença de valores, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Consistência*:\n\n" +
+                         "(Ex: Estoque inconsistente, diferença de valores, etc)"
             },
             administrativo: {
                 titulo: "📦 Módulo Administrativo/Estoque",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Você selecionou *Módulo Administrativo/Estoque*.\n\n" +
-                                 "Escolha uma opção:\n\n" +
-                                 "1️⃣ Custo, preço e estoque de produto\n" +
-                                 "2️⃣ Cadastro de novos produtos\n" +
-                                 "3️⃣ Balanço de estoque\n" +
-                                 "4️⃣ Voltar ao menu principal\n\n" +
-                                 "*Digite o número da opção desejada:*",
-                        opcoes: [
-                            { id: '1', texto: '1️⃣ Custo/Preço/Estoque', fluxo: 'adm_custo' },
-                            { id: '2', texto: '2️⃣ Cadastro novos produtos', fluxo: 'adm_cadastro' },
-                            { id: '3', texto: '3️⃣ Balanço de estoque', fluxo: 'adm_balanco' },
-                            { id: '4', texto: '4️⃣ Voltar', fluxo: 'voltar' }
-                        ]
+                menu: {
+                    pergunta: "Você selecionou *Módulo Administrativo/Estoque*.\n\n" +
+                             "Escolha uma opção:\n\n" +
+                             "1️⃣ Custo, preço e estoque de produto\n" +
+                             "2️⃣ Cadastro de novos produtos\n" +
+                             "3️⃣ Balanço de estoque\n" +
+                             "4️⃣ Voltar ao menu principal\n\n" +
+                             "*Digite o número da opção desejada:*",
+                    opcoes: {
+                        '1': { texto: 'Custo/Preço/Estoque', fluxo: 'adm_custo' },
+                        '2': { texto: 'Cadastro novos produtos', fluxo: 'adm_cadastro' },
+                        '3': { texto: 'Balanço de estoque', fluxo: 'adm_balanco' },
+                        '4': { texto: 'Voltar', fluxo: 'menu' }
                     }
-                ]
+                }
             },
             adm_custo: {
                 titulo: "📦 Adm > Custo/Preço/Estoque",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Custos/Preços/Estoque*:\n\n" +
-                                 "(Ex: Custo errado, preço não atualiza, estoque negativo, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Custos/Preços/Estoque*:\n\n" +
+                         "(Ex: Custo errado, preço não atualiza, estoque negativo, etc)"
             },
             adm_cadastro: {
                 titulo: "📦 Adm > Cadastro de Produtos",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Cadastro de Produtos*:\n\n" +
-                                 "(Ex: Erro ao cadastrar, duplicidade, campos obrigatórios, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Cadastro de Produtos*:\n\n" +
+                         "(Ex: Erro ao cadastrar, duplicidade, campos obrigatórios, etc)"
             },
             adm_balanco: {
                 titulo: "📦 Adm > Balanço de Estoque",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *resuma seu problema com Balanço de Estoque*:\n\n" +
-                                 "(Ex: Diferença no balanço, ajuste manual, etc)",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *resuma seu problema com Balanço de Estoque*:\n\n" +
+                         "(Ex: Diferença no balanço, ajuste manual, etc)"
             },
             outros: {
                 titulo: "📝 Outros Assuntos",
-                perguntas: [
-                    {
-                        id: 1,
-                        pergunta: "Por favor, *descreva seu problema ou dúvida*:\n\n" +
-                                 "Fique à vontade para detalhar o máximo possível:",
-                        tipo: 'texto'
-                    }
-                ]
+                pergunta: "Por favor, *descreva seu problema ou dúvida*:\n\n" +
+                         "Fique à vontade para detalhar o máximo possível:"
             }
         };
     }
@@ -209,108 +134,104 @@ class QuestionarioService {
     iniciarQuestionario() {
         console.log('📝 Iniciando novo atendimento - Menu Principal');
         return {
-            etapa: 'menu',
             fluxo: 'menu',
-            pergunta: this.menuPrincipal,
             respostas: {}
         };
     }
 
-    async processarResposta(estadoAtual, mensagem) {
-        console.log('🎯 Processando resposta:', { estadoAtual, mensagem });
+    processarResposta(estado, mensagem) {
+        console.log('🎯 Processando:', { estado, mensagem });
 
         // Se não tem estado, começa do menu
-        if (!estadoAtual || !estadoAtual.fluxo) {
-            return this.iniciarQuestionario();
-        }
-
-        // Está no MENU PRINCIPAL
-        if (estadoAtual.fluxo === 'menu') {
-            const opcao = this.menuPrincipal.opcoes.find(o => o.id === mensagem);
-            
-            if (!opcao) {
-                return {
-                    etapa: 'menu',
-                    fluxo: 'menu',
-                    pergunta: this.menuPrincipal,
-                    respostas: estadoAtual.respostas,
-                    erro: true
-                };
-            }
-
-            console.log('🚀 Indo para fluxo:', opcao.fluxo);
-            
-            // Se for "outros", vai direto pra descrição
-            if (opcao.fluxo === 'outros') {
-                return {
-                    etapa: 1,
-                    fluxo: 'outros',
-                    pergunta: this.fluxos.outros.perguntas[0],
-                    respostas: { modulo: 'outros' }
-                };
-            }
-
-            // Vai para o módulo escolhido (mostra o menu do módulo)
+        if (!estado || !estado.fluxo) {
             return {
-                etapa: 1,
-                fluxo: opcao.fluxo,
-                pergunta: this.fluxos[opcao.fluxo].perguntas[0],
-                respostas: { modulo: opcao.fluxo }
+                fluxo: 'menu',
+                resposta: this.menuPrincipal.pergunta,
+                respostas: {}
             };
         }
 
-        // Está em um MÓDULO (fiscal, pdv, administrativo)
-        const fluxoAtual = this.fluxos[estadoAtual.fluxo];
-        
-        if (!fluxoAtual) {
-            return this.iniciarQuestionario();
-        }
+        const fluxoAtual = estado.fluxo;
 
-        // Se tem opções (está no menu do módulo)
-        if (fluxoAtual.perguntas[0].opcoes) {
-            const opcao = fluxoAtual.perguntas[0].opcoes.find(o => o.id === mensagem);
+        // Está no MENU PRINCIPAL
+        if (fluxoAtual === 'menu') {
+            const opcao = this.menuPrincipal.opcoes[mensagem];
             
             if (!opcao) {
                 return {
-                    etapa: 1,
-                    fluxo: estadoAtual.fluxo,
-                    pergunta: fluxoAtual.perguntas[0],
-                    respostas: estadoAtual.respostas,
-                    erro: true
+                    fluxo: 'menu',
+                    resposta: this.menuPrincipal.pergunta,
+                    respostas: estado.respostas,
+                    erro: 'Opção inválida'
+                };
+            }
+
+            console.log('🚀 Indo para:', opcao.fluxo);
+
+            // Se for "outros", vai direto pra pergunta final
+            if (opcao.fluxo === 'outros') {
+                return {
+                    fluxo: 'outros',
+                    resposta: this.fluxos.outros.pergunta,
+                    respostas: { ...estado.respostas, modulo: 'outros' }
+                };
+            }
+
+            // Vai para o menu do módulo escolhido
+            return {
+                fluxo: opcao.fluxo,
+                resposta: this.fluxos[opcao.fluxo].menu.pergunta,
+                respostas: { ...estado.respostas, modulo: opcao.fluxo }
+            };
+        }
+
+        // Está em um MÓDULO com MENU (fiscal, pdv, administrativo)
+        if (this.fluxos[fluxoAtual]?.menu) {
+            const opcao = this.fluxos[fluxoAtual].menu.opcoes[mensagem];
+            
+            if (!opcao) {
+                return {
+                    fluxo: fluxoAtual,
+                    resposta: this.fluxos[fluxoAtual].menu.pergunta,
+                    respostas: estado.respostas,
+                    erro: 'Opção inválida'
                 };
             }
 
             // Voltar ao menu principal
-            if (opcao.fluxo === 'voltar') {
-                return this.iniciarQuestionario();
+            if (opcao.fluxo === 'menu') {
+                return {
+                    fluxo: 'menu',
+                    resposta: this.menuPrincipal.pergunta,
+                    respostas: {}
+                };
             }
 
             console.log('🚀 Indo para subfluxo:', opcao.fluxo);
-            
-            // Vai para o subfluxo (descrição do problema)
+
+            // Vai para a pergunta final do subfluxo
             return {
-                etapa: 1,
                 fluxo: opcao.fluxo,
-                pergunta: this.fluxos[opcao.fluxo].perguntas[0],
+                resposta: this.fluxos[opcao.fluxo].pergunta,
                 respostas: {
-                    ...estadoAtual.respostas,
+                    ...estado.respostas,
                     submodulo: opcao.fluxo
                 }
             };
         }
 
-        // Está na DESCRIÇÃO DO PROBLEMA (última etapa)
-        const respostas = { ...estadoAtual.respostas };
+        // Está na PERGUNTA FINAL (descrevendo o problema)
+        const respostas = { ...estado.respostas };
         respostas.descricao = mensagem;
 
         // Questionário completo!
         return {
             completo: true,
-            fluxo: estadoAtual.fluxo,
+            fluxo: fluxoAtual,
             respostas,
-            assunto: estadoAtual.fluxo,
-            titulo: fluxoAtual.titulo,
-            resumo: this.gerarResumo(estadoAtual.fluxo, respostas)
+            assunto: fluxoAtual,
+            titulo: this.fluxos[fluxoAtual].titulo,
+            resumo: this.gerarResumo(fluxoAtual, respostas)
         };
     }
 

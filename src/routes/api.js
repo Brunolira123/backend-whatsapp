@@ -112,8 +112,16 @@ router.post('/mensagem/enviar', authMiddleware, async (req, res) => {
     const { atendimentoId, mensagem, analistaId } = req.body;
     const whatsappService = req.whatsappService;
 
+    console.log('📤 Tentando enviar mensagem:', { atendimentoId, mensagem, analistaId });
+    console.log('🛠️ whatsappService na requisição:', !!whatsappService);
+
     if (!atendimentoId || !mensagem || !analistaId) {
         return res.status(400).json({ error: 'Dados incompletos' });
+    }
+
+    if (!whatsappService) {
+        console.error('❌ whatsappService não disponível na requisição');
+        return res.status(500).json({ error: 'Serviço WhatsApp não inicializado' });
     }
 
     try {
@@ -147,8 +155,8 @@ router.post('/mensagem/enviar', authMiddleware, async (req, res) => {
             res.status(500).json({ error: 'Erro ao enviar mensagem' });
         }
     } catch (error) {
-        console.error('Erro ao enviar mensagem:', error);
-        res.status(500).json({ error: 'Erro interno do servidor' });
+        console.error('❌ Erro ao enviar mensagem:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 

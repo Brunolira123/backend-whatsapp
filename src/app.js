@@ -3,9 +3,10 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const { initDatabase } = require('./database/postgres');
-const { redisClient, connectRedis } = require('./database/redis');
+const { redisClient, connectRedis, QUEUES } = require('./database/redis');
 const WhatsAppService = require('./services/whatsappService');
 const apiRoutes = require('./routes/api');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,7 +39,19 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Rotas da API
+// 🔥 PRIMEIRO: Inicializar WhatsApp Service
+const whatsappService = new WhatsAppService(io);
+
+// 🔥 SEGUNDO: Middleware para disponibilizar whatsappService em TODAS as rotas
+app.use((req, res, next) => {
+    req.whatsappService = whatsappService;
+    req.io = io;
+    console.log('✅ Middleware executado - whatsappService disponível');
+    next();
+});
+
+// 🔥 TERCEIRO: Rotas (DEPOIS do middleware)
+app.use('/api/auth', authRoutes);
 app.use('/api', apiRoutes);
 
 // Socket.io
@@ -48,13 +61,11 @@ io.on('connection', (socket) => {
     socket.on('autenticar_analista', async (data) => {
         const { analistaId, token } = data;
         
-        // Aqui você pode validar o JWT
         socket.join(`analista_${analistaId}`);
         socket.analistaId = analistaId;
         
         console.log(`👨‍💻 Analista ${analistaId} autenticado`);
         
-        // Enviar status do WhatsApp
         socket.emit('whatsapp_status', { 
             status: whatsappService?.status || 'disconnected' 
         });
@@ -81,28 +92,15 @@ io.on('connection', (socket) => {
     });
 });
 
-// Inicializar WhatsApp Service com io
-const whatsappService = new WhatsAppService(io);
-
-// Middleware para disponibilizar whatsappService nas rotas
-app.use((req, res, next) => {
-    req.whatsappService = whatsappService;
-    req.io = io;
-    next();
-});
-
 // Inicializar tudo
 const start = async () => {
     try {
-        // Conectar PostgreSQL
         await initDatabase();
         console.log('✅ PostgreSQL conectado');
         
-        // Conectar Redis
         await connectRedis();
         console.log('✅ Redis conectado');
 
-        // Iniciar WhatsApp
         await whatsappService.initialize();
 
         const PORT = process.env.PORT || 3001;

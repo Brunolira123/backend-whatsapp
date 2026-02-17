@@ -159,8 +159,8 @@ class WhatsAppService {
     try {
         console.log('📝 Processando questionário para:', from, 'Sessão:', sessao);
         
-        // Usar o método correto: processarResposta
-        const resultado = await questionarioService.processarResposta(sessao, mensagem);
+        // Processar resposta
+        const resultado = questionarioService.processarResposta(sessao, mensagem);
 
         if (resultado.completo) {
             console.log('✅ Questionário completo para:', from);
@@ -182,7 +182,11 @@ class WhatsAppService {
             );
 
             // Enviar mensagem final
-            await this.client.sendMessage(from, this.perguntas[4]?.pergunta || "Um analista vai te atender em instantes!");
+            const mensagemFinal = questionarioService.mensagemFinal(
+                resultado.fluxo, 
+                resultado.respostas
+            );
+            await this.client.sendMessage(from, mensagemFinal);
 
             // Adicionar à fila do Redis
             await this.adicionarFilaRedis(atendimento.id, from, resultado);
@@ -198,18 +202,18 @@ class WhatsAppService {
                 timestamp: Date.now()
             });
 
+            // Limpar sessão
             this.sessoesAtivas.delete(from);
 
         } else {
             // Enviar próxima pergunta
-            console.log('📤 Enviando pergunta:', resultado.pergunta);
-            await this.enviarPergunta(from, resultado.pergunta);
+            console.log('📤 Enviando pergunta:', resultado.resposta.substring(0, 50) + '...');
+            await this.client.sendMessage(from, resultado.resposta);
             
             // Salvar estado
             this.sessoesAtivas.set(from, {
-                etapa: resultado.etapa,
-                respostas: resultado.respostas,
-                atendimentoId: atendimento.id
+                fluxo: resultado.fluxo,
+                respostas: resultado.respostas || {}
             });
         }
     } catch (error) {
@@ -349,22 +353,23 @@ class WhatsAppService {
         });
     }
 
-    async enviarMensagemParaCliente(numero, mensagem, analistaId) {
-        try {
-            const numeroFormatado = numero.includes('@c.us') ? numero : `${numero}@c.us`;
-            await this.client.sendMessage(numeroFormatado, mensagem);
-            
-            const atendimento = await this.getAtendimentoAtivo(numero);
-            if (atendimento) {
-                await this.salvarMensagem(atendimento.id, 'analista', mensagem, 'texto');
-            }
-            
-            return true;
-        } catch (error) {
-            console.error('Erro ao enviar mensagem:', error);
-            return false;
+   async enviarMensagemParaCliente(numero, mensagem, analistaId) {
+    try {
+        console.log('📤 Enviando mensagem para:', numero);
+        const numeroFormatado = numero.includes('@c.us') ? numero : `${numero}@c.us`;
+        await this.client.sendMessage(numeroFormatado, mensagem);
+        
+        const atendimento = await this.getAtendimentoAtivo(numero);
+        if (atendimento) {
+            await this.salvarMensagem(atendimento.id, 'analista', mensagem, 'texto');
         }
+        
+        return true;
+    } catch (error) {
+        console.error('Erro ao enviar mensagem:', error);
+        return false;
     }
+}
 
     emitirStatus(evento, dados = {}) {
         this.io.emit('whatsapp_status', { status: this.status, ...dados });
